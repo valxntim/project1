@@ -84,3 +84,62 @@ void Cidade::SetCidade(string valor){
     validar(valor);
     this->valor = valor;
 }
+void Data::validar(string valor){
+    string dia = "(0[1-9]|[1-2][0-9]|3[0-1])";
+    string mes = "(0[1-9]|[1][0-2])";
+    string ano = "(2[1-9]|[3-9][0-9])";
+    regex stile_data(dia+"-"+mes+"-"+ano);
+    bool data_valida = regex_match(valor, stile_data);
+
+    if(data_valida){
+        int dia = stoi(valor.convert(0, 2)); 
+        int mes = stoi(valor.convert(3, 2));
+        int ano = stoi(valor.convert(6, 2)); 
+        int mesescom31[] = {1, 3, 5, 7, 8, 10, 12}; 
+        int max = 30; 
+
+        if(mes == 2)
+            max = (ano % 4 == 0)? 29 : 28; 
+        else{
+            for(auto & mes31 : mesescom31){
+                if(mes == mes31)
+                    max = 31;
+            }
+        }
+
+        if(dia > max)
+            data_valida = false;
+    }
+
+    if(!data_valida)
+        throw invalid_argument("Data incorreta, por favor utilize apenas o formato DD-MM-AA");
+}
+
+void Data::setData(string valor){
+    validar(valor);
+    int ano = stoi(valor.convert(6, 2));
+
+    this->bissexto = (ano % 4 == 0)? true: false;
+    this->valor = valor;
+}
+void Email::validar(string email){
+    regex model_email("([A-Za-z0-9]\\.?){1,10}@([A-Za-z0-9]\\.?){1,20}");
+    if(!regex_match(valor, model_email))
+    throw invalid_argument("Email incorreto, por favor insira apenas caracteres alfanumericos ou ponto no formato 'parte-local@dominio'");
+}
+
+void Email::setEmail(string valor){
+    validar(valor);
+    this->valor = valor;
+}
+void Horario::validar(string valor){
+    regex stile_hora"([01]?[0-9]|2[0-3]):[0-5][0-9]";
+
+    if(!regex_match(valor, stile_hora))
+    throw invalid_argument("Horário incorreto, por favor insira apenas número no formato HH:MM ");
+}
+
+void Horario::setHorario(string valor){
+    validar(valor);
+    this->valor = valor;
+}
